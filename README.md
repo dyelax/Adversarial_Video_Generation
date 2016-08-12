@@ -4,7 +4,10 @@ This project implements a generative adversarial network to predict future frame
 Adversarial generation uses two networks – a generator and a discriminator – to improve the sharpness of generated images. Given the past four frames of video, the generator learns to generate accurate predictions for the next frame. Given either a generated or a real-world image, the discriminator learns to correctly classify between generated and real. The two networks "compete," with the generator attempting to fool the discriminator into classifying its output as real. This forces the generator to create frames that are very similar to what real frames in the domain might look like.
 
 ## Results and Comparison
-I trained and tested my network on a dataset of frames sequences from Ms. PacMan. To compare adversarial training vs. non-adversarial, I trained an adversarial network for 500,000 steps on both the generator and discriminator and a non-adversarial network for 1,000,000 steps (as the non-adversarial network runs about twice as fast). Training took around 24 hours for each network, using a GTX 980TI GPU.
+I trained and tested my network on a dataset of frame sequences from Ms. PacMan. To compare adversarial 
+training vs. non-adversarial, I trained an adversarial network for 500,000 steps on both the generator and 
+discriminator, and I trained  a non-adversarial network for 1,000,000 steps (as the non-adversarial network 
+runs about twice as fast). Training took around 24 hours for each network, using a GTX 980TI GPU.
 
 In the following examples, I ran the networks recursively for 64 frames. (i.e. The input to generate the first frame was [input1, input2, input3, input4], the input to generate the second frame was [input2, input3, input4, generated1], etc.). As the networks are not fed actions from the original game, the goal is not to line up perfectly with the ground truth images (as they couldn't possbily know what to do at intersections), but to maintain a crisp and likely representation of the world.
 
