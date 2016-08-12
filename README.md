@@ -64,7 +64,7 @@ Using the error measurements outlined in the paper (Peak Signal to Noise Ratio a
   ```
   -l/--load_path=    <Relative/path/to/saved/model>
   -t/--test_dir=     <Directory of test images>
-  -r--recursions=   <# recursive predictions to make on test>
+  -r--recursions=    <# recursive predictions to make on test>
   -a/--adversarial=  <{t/f}> (Whether to use adversarial training. Default=True)
   -n/--name=         <Subdirectory of ../Data/Save/*/ in which to save output of this run>
   -O/--overwrite     (Overwrites all previous data for the model with this save name)
