@@ -104,12 +104,12 @@ def usage():
     print '-n/--name=         <Subdirectory of ../Data/Save/*/ in which to save output of this run>'
     print '-O/--overwrite     (Overwrites all previous data for the model with this save name)'
     print '-T/--test_only     (Only runs a test step -- no training)'
-    print '-H/--help          (prints usage)'
-    print '--stats_freq=      <how often to print loss/train error stats, in # steps>'
-    print '--summary_freq=    <how often to save loss/error summaries, in # steps>'
-    print '--img_save_freq=   <how often to save generated images, in # steps>'
-    print '--test_freq=       <how often to test the model on test data, in # steps>'
-    print '--model_save_freq= <how often to save the model, in # steps>'
+    print '-H/--help          (Prints usage)'
+    print '--stats_freq=      <How often to print loss/train error stats, in # steps>'
+    print '--summary_freq=    <How often to save loss/error summaries, in # steps>'
+    print '--img_save_freq=   <How often to save generated images, in # steps>'
+    print '--test_freq=       <How often to test the model on test data, in # steps>'
+    print '--model_save_freq= <How often to save the model, in # steps>'
 
 
 def main():

@@ -28,12 +28,13 @@ def process_training_data(num_clips):
 
 def usage():
     print 'Options:'
-    print '-n/--num_clips= <# clips to process for training>'
+    print '-n/--num_clips= <# clips to process for training> (Default = 5000000)'
     print '-t/--train_dir= <Directory of full training frames>'
     print '-c/--clips_dir= <Save directory for processed clips>'
     print "                (I suggest making this a hidden dir so the filesystem doesn't freeze"
     print "                 with so many files. DON'T `ls` THIS DIRECTORY!)"
-    print '-o/--overwrite  (Overwrites the previous data in the training dir)'
+    print '-o/--overwrite  (Overwrites the previous data in clips_dir)'
+    print '-H/--help       (Prints usage)'
 
 
 def main():
@@ -44,8 +45,8 @@ def main():
     num_clips = 5000000
 
     try:
-        opts, _ = getopt.getopt(sys.argv[1:], 'n:t:c:o',
-                                ['num_clips=', 'train_dir=', 'clips_dir=', 'overwrite'])
+        opts, _ = getopt.getopt(sys.argv[1:], 'n:t:c:oH',
+                                ['num_clips=', 'train_dir=', 'clips_dir=', 'overwrite', 'help'])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
@@ -59,6 +60,9 @@ def main():
             c.TRAIN_DIR_CLIPS = c.get_dir(arg)
         if opt in ('-o', '--overwrite'):
             c.clear_dir(c.TRAIN_DIR_CLIPS)
+        if opt in ('-H', '--help'):
+            usage()
+            sys.exit(2)
 
     ##
     # Process data for training
