@@ -58,7 +58,7 @@ Using the error measurements outlined in the paper (Peak Signal to Noise Ratio a
   ```
   - This can take a few hours to complete, depending on the number of clips you want.
   
-4. Train:
+4. Train/Test:
   - If you want to plug-and-play with the pacman dataset, you can [download my trained models here](https://drive.google.com/open?id=0Byf787GZQ7KvR2JvMUNIZnFlbm8). Load them using the `-l` command described below.
   - Train and test your networks by running `python avg_runner.py` from the `Code/` directory, with the following options:
   ```
