@@ -23,7 +23,7 @@ While the adversarial network is clearly superior in terms of sharpness and cons
 
 <img src="https://github.com/dyelax/Adversarial_Video_Generation/raw/master/Results/Gifs/rainbow_NonAdv.gif" width="50%" />
 
-Using the error measurements outlined in the paper (Peak Signal to Noise Ratio and Sharp Difference) did not show significant difference between adversarial and non-adversarial training. I believe this is because sequential frames from the Ms. Pac-Man dataset have no motion in the majority of pixels. While I could not replicate the paper's results numerically, it is clear that adversarial training produces a qualitative improvement in the sharpness of the generated frames, especially over long time spans. You can view the loss and error statistics by running `tensorboard --logdir=./Results/Summaries/` from the root of this project.
+Using the error measurements outlined in the paper (Peak Signal to Noise Ratio and Sharp Difference) did not show significant difference between adversarial and non-adversarial training. I believe this is because sequential frames from the Ms. Pac-Man dataset have no motion in the majority of pixels, while the original paper was trained on real-world video where there is motion in much of the frame. Despite this, it is clear that adversarial training produces a qualitative improvement in the sharpness of the generated frames, especially over long time spans. You can view the loss and error statistics by running `tensorboard --logdir=./Results/Summaries/` from the root of this project.
 
 ## Usage
 
