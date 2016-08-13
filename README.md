@@ -9,7 +9,7 @@ training vs. non-adversarial, I trained an adversarial network for 500,000 steps
 discriminator, and I trained  a non-adversarial network for 1,000,000 steps (as the non-adversarial network 
 runs about twice as fast). Training took around 24 hours for each network, using a GTX 980TI GPU.
 
-In the following examples, I ran the networks recursively for 64 frames. (i.e. The input to generate the first frame was [input1, input2, input3, input4], the input to generate the second frame was [input2, input3, input4, generated1], etc.). As the networks are not fed actions from the original game, the goal is not to line up perfectly with the ground truth images (as they couldn't possbily know what to do at intersections), but to maintain a crisp and likely representation of the world.
+In the following examples, I ran the networks recursively for 64 frames. (i.e. The input to generate the first frame was [input1, input2, input3, input4], the input to generate the second frame was [input2, input3, input4, generated1], etc.). As the networks are not fed actions from the original game, they cannot predict much of the true motion (such as in which direction Ms. Pac-Man will turn). Thus, the goal is not to line up perfectly with the ground truth images, but to maintain a crisp and likely representation of the world.
 
 The following example exhibits how quickly the non-adversarial network becomes fuzzy and loses definition of the sprites. The adversarial network exhibits this behavior to an extent, but is much better at maintaining sharp representations of at least some sprites throughout the sequence:
 
