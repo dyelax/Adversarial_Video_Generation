@@ -1,6 +1,7 @@
 import tensorflow as tf
 import getopt
 import sys
+import os
 
 from utils import get_train_batch, get_test_batch
 import constants as c
@@ -157,6 +158,10 @@ def main():
             c.TEST_FREQ = int(arg)
         if opt == '--model_save_freq':
             c.MODEL_SAVE_FREQ = int(arg)
+
+    # set test frame dimensions
+    assert os.path.exists(c.TEST_DIR)
+    c.TEST_HEIGHT, c.TEST_WIDTH = c.get_test_frame_dims()
 
     ##
     # Init and run the predictor
