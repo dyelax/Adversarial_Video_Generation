@@ -20,8 +20,8 @@ class GeneratorModel:
         @param summary_writer: The writer object to record TensorBoard summaries
         @param height_train: The height of the input images for training.
         @param width_train: The width of the input images for training.
-        @param height_train: The height of the input images for testing.
-        @param width_train: The width of the input images for testing.
+        @param height_test: The height of the input images for testing.
+        @param width_test: The width of the input images for testing.
         @param scale_layer_fms: The number of feature maps in each layer of each scale network.
         @param scale_kernel_sizes: The size of the kernel for each layer of each scale network.
 
