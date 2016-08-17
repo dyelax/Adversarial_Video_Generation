@@ -3,6 +3,7 @@ import numpy as np
 from scipy.misc import imsave
 from skimage.transform import resize
 from copy import deepcopy
+import os
 
 import constants as c
 from loss_functions import combined_loss
@@ -318,20 +319,20 @@ class GeneratorModel:
 
             # for every clip in the batch, save the inputs, scale preds and scale gts
             for pred_num in xrange(len(input_frames)):
-                pred_dir = c.get_dir(c.IMG_SAVE_DIR + 'Step_' + str(global_step) + '/' + str(
-                    pred_num) + '/')
+                pred_dir = c.get_dir(os.path.join(c.IMG_SAVE_DIR, 'Step_' + str(global_step),
+                                                  str(pred_num)))
 
                 # save input images
                 for frame_num in xrange(c.HIST_LEN):
                     img = input_frames[pred_num, :, :, (frame_num * 3):((frame_num + 1) * 3)]
-                    imsave(pred_dir + 'input_' + str(frame_num) + '.png', img)
+                    imsave(os.path.join(pred_dir, 'input_' + str(frame_num) + '.png'), img)
 
                 # save preds and gts at each scale
                 # noinspection PyUnboundLocalVariable
                 for scale_num, scale_pred in enumerate(scale_preds):
                     gen_img = scale_pred[pred_num]
 
-                    path = pred_dir + 'scale' + str(scale_num)
+                    path = os.path.join(pred_dir, 'scale' + str(scale_num))
                     gt_img = scale_gts[scale_num][pred_num]
 
                     imsave(path + '_gen.png', gen_img)
@@ -410,19 +411,19 @@ class GeneratorModel:
 
         if save_imgs:
             for pred_num in xrange(len(input_frames)):
-                pred_dir = c.get_dir(
-                    c.IMG_SAVE_DIR + 'Tests/Step_' + str(global_step) + '/' + str(pred_num) + '/')
+                pred_dir = c.get_dir(os.path.join(
+                    c.IMG_SAVE_DIR, 'Tests/Step_' + str(global_step), str(pred_num)))
 
                 # save input images
                 for frame_num in xrange(c.HIST_LEN):
                     img = input_frames[pred_num, :, :, (frame_num * 3):((frame_num + 1) * 3)]
-                    imsave(pred_dir + 'input_' + str(frame_num) + '.png', img)
+                    imsave(os.path.join(pred_dir, 'input_' + str(frame_num) + '.png'), img)
 
                 # save recursive outputs
                 for rec_num in xrange(num_rec_out):
                     gen_img = rec_preds[rec_num][pred_num]
                     gt_img = gt_frames[pred_num, :, :, 3 * rec_num:3 * (rec_num + 1)]
-                    imsave(pred_dir + 'gen_' + str(rec_num) + '.png', gen_img)
-                    imsave(pred_dir + 'gt_' + str(rec_num) + '.png', gt_img)
+                    imsave(os.path.join(pred_dir, 'gen_' + str(rec_num) + '.png'), gen_img)
+                    imsave(os.path.join(pred_dir, 'gt_' + str(rec_num) + '.png'), gt_img)
 
         print '-' * 30

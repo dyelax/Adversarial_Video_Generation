@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 from scipy.ndimage import imread
 from glob import glob
+import os
 
 import constants as c
 from tfutils import log10
@@ -77,7 +78,7 @@ def get_full_clips(data_dir, num_clips, num_rec_out=1):
 
     # get a random clip of length HIST_LEN + 1 from each episode
     for clip_num, ep_dir in enumerate(ep_dirs):
-        ep_frame_paths = glob(ep_dir + '/*')
+        ep_frame_paths = glob(os.path.join(ep_dir, '*'))
         start_index = np.random.choice(len(ep_frame_paths) - (c.HIST_LEN + num_rec_out - 1))
         clip_frame_paths = ep_frame_paths[start_index:start_index + (c.HIST_LEN + num_rec_out)]
 

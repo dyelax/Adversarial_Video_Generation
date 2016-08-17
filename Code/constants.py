@@ -43,7 +43,7 @@ def clear_dir(directory):
             print(e)
 
 def get_test_frame_dims():
-    img_path = glob(TEST_DIR + '*/*')[0]
+    img_path = glob(os.path.join(TEST_DIR, '*/*'))[0]
     img = imread(img_path, mode='RGB')
     shape = np.shape(img)
 
@@ -63,12 +63,12 @@ def set_test_dir(directory):
 # root directory for all data
 DATA_DIR = get_dir('../Data/')
 # directory of unprocessed training frames
-TRAIN_DIR = DATA_DIR + 'Ms_Pacman/Train/'
+TRAIN_DIR = os.path.join(DATA_DIR, 'Ms_Pacman/Train/')
 # directory of unprocessed test frames
-TEST_DIR = DATA_DIR + 'Ms_Pacman/Test/'
+TEST_DIR = os.path.join(DATA_DIR, 'Ms_Pacman/Test/')
 # Directory of processed training clips.
 # hidden so finder doesn't freeze w/ so many files. DON'T USE `ls` COMMAND ON THIS DIR!
-TRAIN_DIR_CLIPS = get_dir(DATA_DIR + '.Clips/')
+TRAIN_DIR_CLIPS = get_dir(os.path.join(DATA_DIR, '.Clips/'))
 
 # For processing clips. l2 diff between frames must be greater than this
 MOVEMENT_THRESHOLD = 100
@@ -93,9 +93,9 @@ def set_save_name(name):
     global SAVE_NAME, MODEL_SAVE_DIR, SUMMARY_SAVE_DIR, IMG_SAVE_DIR
 
     SAVE_NAME = name
-    MODEL_SAVE_DIR = get_dir(SAVE_DIR + 'Models/' + SAVE_NAME)
-    SUMMARY_SAVE_DIR = get_dir(SAVE_DIR + 'Summaries/' + SAVE_NAME)
-    IMG_SAVE_DIR = get_dir(SAVE_DIR + 'Images/' + SAVE_NAME)
+    MODEL_SAVE_DIR = get_dir(os.path.join(SAVE_DIR, 'Models/', SAVE_NAME))
+    SUMMARY_SAVE_DIR = get_dir(os.path.join(SAVE_DIR, 'Summaries/', SAVE_NAME))
+    IMG_SAVE_DIR = get_dir(os.path.join(SAVE_DIR, 'Images/', SAVE_NAME))
 
 def clear_save_name():
     """
@@ -112,11 +112,11 @@ SAVE_DIR = get_dir('../Save/')
 # inner directory to differentiate between runs
 SAVE_NAME = 'Default/'
 # directory for saved models
-MODEL_SAVE_DIR = get_dir(SAVE_DIR + 'Models/' + SAVE_NAME)
+MODEL_SAVE_DIR = get_dir(os.path.join(SAVE_DIR, 'Models/', SAVE_NAME))
 # directory for saved TensorBoard summaries
-SUMMARY_SAVE_DIR = get_dir(SAVE_DIR + 'Summaries/' + SAVE_NAME)
+SUMMARY_SAVE_DIR = get_dir(os.path.join(SAVE_DIR, 'Summaries/', SAVE_NAME))
 # directory for saved images
-IMG_SAVE_DIR = get_dir(SAVE_DIR + 'Images/' + SAVE_NAME)
+IMG_SAVE_DIR = get_dir(os.path.join(SAVE_DIR, 'Images/', SAVE_NAME))
 
 
 STATS_FREQ      = 10     # how often to print loss/train error stats, in # steps
