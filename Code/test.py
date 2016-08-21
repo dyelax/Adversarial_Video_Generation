@@ -39,6 +39,8 @@ def get_full_clips(data_dir, num_clips, num_rec_out=1):
         ep_frame_paths = glob(os.path.join(ep_dir, '*'))
         start_index = np.random.choice(len(ep_frame_paths) - (c.HIST_LEN + num_rec_out - 1))
         clip_frame_paths = ep_frame_paths[start_index:start_index + (c.HIST_LEN + num_rec_out)]
+        print clip_num
+        print clip_frame_paths
 
         # read in frames
         for frame_num, frame_path in enumerate(clip_frame_paths):
@@ -52,16 +54,16 @@ def get_full_clips(data_dir, num_clips, num_rec_out=1):
 
     return clips
 
-# get_full_clips('../Data/Ms_Pacman/Test/', 8, num_rec_out=64)
+get_full_clips('../Data/Ms_Pacman/Test/', 8, num_rec_out=64)
 
-def test():
-    """
-    Runs one test step on the generator network.
-    """
-    batch = get_test_batch(c.BATCH_SIZE, num_rec_out=2)
-    save_batch(batch, 2)
-
-    # self.g_model.test_batch(
-    #     batch, self.global_step, num_rec_out=2)
-
-test()
+# def test():
+#     """
+#     Runs one test step on the generator network.
+#     """
+#     batch = get_test_batch(c.BATCH_SIZE, num_rec_out=2)
+#     save_batch(batch, 2)
+#
+#     # self.g_model.test_batch(
+#     #     batch, self.global_step, num_rec_out=2)
+#
+# test()
