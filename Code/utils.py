@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from scipy.misc import imread
+from scipy.ndimage import imread
 from glob import glob
 import os
 
