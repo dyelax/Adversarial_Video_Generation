@@ -2,7 +2,8 @@ import numpy as np
 import constants as c
 from utils import normalize_frames, get_test_batch
 from glob import glob
-from scipy.misc import imread, imsave
+from scipy.ndimage import imread
+from scipy.misc import imsave
 import os
 
 def save_batch(batch, num_rec_out):
