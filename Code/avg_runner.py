@@ -42,8 +42,8 @@ class AVGRunner:
                                       self.summary_writer,
                                       c.TRAIN_HEIGHT,
                                       c.TRAIN_WIDTH,
-                                      c.TEST_HEIGHT,
-                                      c.TEST_WIDTH,
+                                      c.FULL_HEIGHT,
+                                      c.FULL_WIDTH,
                                       c.SCALE_FMS_G,
                                       c.SCALE_KERNEL_SIZES_G)
 
@@ -161,7 +161,7 @@ def main():
 
     # set test frame dimensions
     assert os.path.exists(c.TEST_DIR)
-    c.TEST_HEIGHT, c.TEST_WIDTH = c.get_test_frame_dims()
+    c.FULL_HEIGHT, c.FULL_WIDTH = c.get_test_frame_dims()
 
     ##
     # Init and run the predictor

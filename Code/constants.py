@@ -49,16 +49,23 @@ def get_test_frame_dims():
 
     return shape[0], shape[1]
 
+def get_train_frame_dims():
+    img_path = glob(os.path.join(TRAIN_DIR, '*/*'))[0]
+    img = imread(img_path, mode='RGB')
+    shape = np.shape(img)
+
+    return shape[0], shape[1]
+
 def set_test_dir(directory):
     """
     Edits all constants dependent on TEST_DIR.
 
     @param directory: The new test directory.
     """
-    global TEST_DIR, TEST_HEIGHT, TEST_WIDTH
+    global TEST_DIR, FULL_HEIGHT, FULL_WIDTH
 
     TEST_DIR = directory
-    TEST_HEIGHT, TEST_WIDTH = get_test_frame_dims()
+    FULL_HEIGHT, FULL_WIDTH = get_test_frame_dims()
 
 # root directory for all data
 DATA_DIR = get_dir('../Data/')
@@ -75,8 +82,9 @@ MOVEMENT_THRESHOLD = 100
 # total number of processed clips in TRAIN_DIR_CLIPS
 NUM_CLIPS = len(glob(TRAIN_DIR_CLIPS + '*'))
 
-# the height and width of the full frames to test on. Set in avg_runner.py main.
-TEST_HEIGHT = TEST_WIDTH = 0
+# the height and width of the full frames to test on. Set in avg_runner.py or process_data.py main.
+FULL_HEIGHT = 210
+FULL_WIDTH = 160
 # the height and width of the patches to train on
 TRAIN_HEIGHT = TRAIN_WIDTH = 32
 

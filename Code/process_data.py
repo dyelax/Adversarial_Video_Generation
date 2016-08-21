@@ -2,6 +2,7 @@ import numpy as np
 import getopt
 import sys
 from glob import glob
+import os
 
 import constants as c
 from utils import process_clip
@@ -63,6 +64,10 @@ def main():
         if opt in ('-H', '--help'):
             usage()
             sys.exit(2)
+
+    # set train frame dimensions
+    assert os.path.exists(c.TRAIN_DIR)
+    c.FULL_HEIGHT, c.FULL_WIDTH = c.get_train_frame_dims()
 
     ##
     # Process data for training
