@@ -36,7 +36,7 @@ def get_full_clips(data_dir, num_clips, num_rec_out=1):
 
     # get a random clip of length HIST_LEN + num_rec_out from each episode
     for clip_num, ep_dir in enumerate(ep_dirs):
-        ep_frame_paths = glob(os.path.join(ep_dir, '*'))
+        ep_frame_paths = sorted(glob(os.path.join(ep_dir, '*')))
         start_index = np.random.choice(len(ep_frame_paths) - (c.HIST_LEN + num_rec_out - 1))
         clip_frame_paths = ep_frame_paths[start_index:start_index + (c.HIST_LEN + num_rec_out)]
         print clip_num
