@@ -54,7 +54,7 @@ def get_full_clips(data_dir, num_clips, num_rec_out=1):
 
     return clips
 
-get_full_clips('../Data/Ms_Pacman/Test/', 8, num_rec_out=64)
+get_full_clips('../Data/Ms_Pacman/Test/', 1, num_rec_out=1)
 
 # def test():
 #     """
