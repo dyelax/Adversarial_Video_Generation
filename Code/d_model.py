@@ -55,7 +55,7 @@ class DiscriminatorModel:
 
             self.scale_nets = []
             for scale_num in xrange(self.num_scale_nets):
-                with tf.name_scope('scale_net_' + str(scale_num)):
+                with tf.name_scope('scale_' + str(scale_num)):
                     scale_factor = 1. / 2 ** ((self.num_scale_nets - 1) - scale_num)
                     self.scale_nets.append(DScaleModel(scale_num,
                                                        int(self.height * scale_factor),
@@ -64,16 +64,34 @@ class DiscriminatorModel:
                                                        self.scale_kernel_sizes[scale_num],
                                                        self.scale_fc_layer_sizes[scale_num]))
 
-            # A list of the prediction tensors for each scale network
-            self.scale_preds = []
-            for scale_num in xrange(self.num_scale_nets):
-                self.scale_preds.append(self.scale_nets[scale_num].preds)
-
             ##
             # Data
             ##
 
+            self.input_frames = tf.placeholder(
+                tf.float32, shape=[None, self.height, self.width, self.scale_conv_layer_fms[0, 0]])
             self.labels = tf.placeholder(tf.float32, shape=[None, 1], name='labels')
+
+            ##
+            # Calculation
+            ##
+
+            # A list of the prediction tensors for each scale network
+            self.scale_preds = []
+
+            for scale_num in xrange(self.num_scale_nets):
+                with tf.name_scope('scale_' + str(scale_num)):
+                    with tf.name_scope('calculation'):
+                        # scale the inputs
+                        scale_factor = 1. / 2 ** ((self.num_scale_nets - 1) - scale_num)
+                        scale_height = int(self.height * scale_factor)
+                        scale_width = int(self.width * scale_factor)
+                        scaled_frames = tf.image.resize_images(
+                            self.input_frames, scale_height, scale_width)
+
+                        # get predictions from the scale network
+                        self.scale_preds.append(
+                            self.scale_nets[scale_num].generate_predictions(scaled_frames))
 
             ##
             # Training

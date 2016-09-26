@@ -76,6 +76,8 @@ class GeneratorModel:
             # Scale network setup and calculation
             ##
 
+            self.train_vars = []  # the variables to train in the optimization step
+
             self.summaries_train = []
             self.scale_preds_train = []  # the generated images at each scale
             self.scale_gts_train = []  # the ground truth images at each scale
@@ -98,6 +100,10 @@ class GeneratorModel:
                                          self.scale_layer_fms[scale_num][i],
                                          self.scale_layer_fms[scale_num][i + 1]]))
                             bs.append(b([self.scale_layer_fms[scale_num][i + 1]]))
+
+                        # add to trainable parameters
+                        self.train_vars += ws
+                        self.train_vars += bs
 
                     with tf.name_scope('calculation'):
                         def calculate(height, width, inputs, gts, last_gen_frames):
@@ -159,6 +165,7 @@ class GeneratorModel:
                         # discriminator on those frames to get d_scale_preds, then run this
                         # again for the loss optimization.
                         if c.ADVERSARIAL:
+
                             self.d_scale_preds.append(tf.placeholder(tf.float32, [None, 1]))
 
                         ##
@@ -194,6 +201,7 @@ class GeneratorModel:
                 self.optimizer = tf.train.AdamOptimizer(learning_rate=c.LRATE_G, name='optimizer')
                 self.train_op = self.optimizer.minimize(self.global_loss,
                                                         global_step=self.global_step,
+                                                        var_list=self.train_vars,
                                                         name='train_op')
 
                 # train loss summary

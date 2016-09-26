@@ -49,105 +49,94 @@ class DScaleModel:
         """
 
         ##
-        # Input data
-        ##
-        with tf.name_scope('input'):
-            self.input_frames = tf.placeholder(
-                tf.float32, shape=[None, self.height, self.width, self.conv_layer_fms[0]])
-
-            # use variable batch_size for more flexibility
-            self.batch_size = tf.shape(self.input_frames)[0]
-
-        ##
         # Layer setup
         ##
-
-        with tf.name_scope('setup'):
-            # convolution
-            with tf.name_scope('convolutions'):
-                conv_ws = []
-                conv_bs = []
-                last_out_height = self.height
-                last_out_width = self.width
-                for i in xrange(len(self.kernel_sizes)):
-                    conv_ws.append(w([self.kernel_sizes[i],
-                                      self.kernel_sizes[i],
-                                      self.conv_layer_fms[i],
-                                      self.conv_layer_fms[i + 1]]))
-                    conv_bs.append(b([self.conv_layer_fms[i + 1]]))
-
-                    last_out_height = conv_out_size(
-                        last_out_height, c.PADDING_D, self.kernel_sizes[i], 1)
-                    last_out_width = conv_out_size(
-                        last_out_width, c.PADDING_D, self.kernel_sizes[i], 1)
-
-            # fully-connected
-            with tf.name_scope('full-connected'):
-                # Add in an initial layer to go from the last conv to the first fully-connected.
-                # Use /2 for the height and width because there is a 2x2 pooling layer
-                self.fc_layer_sizes.insert(
-                    0, (last_out_height / 2) * (last_out_width / 2) * self.conv_layer_fms[-1])
-
-                fc_ws = []
-                fc_bs = []
-                for i in xrange(len(self.fc_layer_sizes) - 1):
-                    fc_ws.append(w([self.fc_layer_sizes[i],
-                                    self.fc_layer_sizes[i + 1]]))
-                    fc_bs.append(b([self.fc_layer_sizes[i + 1]]))
-
-        ##
-        # Forward pass calculation
-        ##
-
-        def generate_predictions():
-            """
-            Runs self.input_frames through the network to generate a prediction from 0
-            (generated img) to 1 (real img).
-
-            @return: A tensor of predictions of shape [self.batch_size x 1].
-            """
-            with tf.name_scope('calculation'):
-                preds = tf.zeros([self.batch_size, 1])
-                last_input = self.input_frames
-
-                # convolutions
+        with tf.name_scope('net'):
+            with tf.name_scope('setup'):
+                # convolution
                 with tf.name_scope('convolutions'):
-                    for i in xrange(len(conv_ws)):
-                        # Convolve layer and activate with ReLU
-                        preds = tf.nn.conv2d(
-                            last_input, conv_ws[i], [1, 1, 1, 1], padding=c.PADDING_D)
-                        preds = tf.nn.relu(preds + conv_bs[i])
+                    self.conv_ws = []
+                    self.conv_bs = []
+                    last_out_height = self.height
+                    last_out_width = self.width
+                    for i in xrange(len(self.kernel_sizes)):
+                        self.conv_ws.append(w([self.kernel_sizes[i],
+                                               self.kernel_sizes[i],
+                                               self.conv_layer_fms[i],
+                                               self.conv_layer_fms[i + 1]]))
+                        self.conv_bs.append(b([self.conv_layer_fms[i + 1]]))
 
-                        last_input = preds
+                        last_out_height = conv_out_size(
+                            last_out_height, c.PADDING_D, self.kernel_sizes[i], 1)
+                        last_out_width = conv_out_size(
+                            last_out_width, c.PADDING_D, self.kernel_sizes[i], 1)
 
-                # pooling layer
-                with tf.name_scope('pooling'):
-                    preds = tf.nn.max_pool(preds, [1, 2, 2, 1], [1, 2, 2, 1], padding=c.PADDING_D)
+                # fully-connected
+                with tf.name_scope('full-connected'):
+                    # Add in an initial layer to go from the last conv to the first fully-connected.
+                    # Use /2 for the height and width because there is a 2x2 pooling layer
+                    self.fc_layer_sizes.insert(
+                        0, (last_out_height / 2) * (last_out_width / 2) * self.conv_layer_fms[-1])
 
-                # flatten preds for dense layers
-                shape = preds.get_shape().as_list()
-                # -1 can be used as one dimension to size dynamically
-                preds = tf.reshape(preds, [-1, shape[1] * shape[2] * shape[3]])
-
-                # fully-connected layers
-                with tf.name_scope('fully-connected'):
-                    for i in xrange(len(fc_ws)):
-                        preds = tf.matmul(preds, fc_ws[i]) + fc_bs[i]
-
-                        # Activate with ReLU (or Sigmoid for last layer)
-                        if i == len(fc_ws) - 1:
-                            preds = tf.sigmoid(preds)
-                        else:
-                            preds = tf.nn.relu(preds)
-
-                # clip preds between [.1, 0.9] for stability
-                with tf.name_scope('clip'):
-                    preds = tf.clip_by_value(preds, 0.1, 0.9)
-
-                return preds
-
-        self.preds = generate_predictions()
+                    self.fc_ws = []
+                    self.fc_bs = []
+                    for i in xrange(len(self.fc_layer_sizes) - 1):
+                        self.fc_ws.append(w([self.fc_layer_sizes[i],
+                                             self.fc_layer_sizes[i + 1]]))
+                        self.fc_bs.append(b([self.fc_layer_sizes[i + 1]]))
 
         ##
         # Training handled by DiscriminatorModel
         ##
+
+    def generate_predictions(self, input_frames):
+        """
+        Runs input_frames through the network to generate a prediction from 0
+        (generated img) to 1 (real img).
+
+        @return: A tensor of predictions of shape [self.batch_size x 1].
+        """
+        input_shape = tf.shape(input_frames)
+        batch_size = input_shape[0]
+        assert input_shape[1] == self.height and input_shape[2] == self.width, \
+            'Input_frames must have same dimensions as scale network. (%d, %d)' \
+            % (self.height, self.width)
+
+        preds = tf.zeros([batch_size, 1])
+        last_input = input_frames
+
+        # convolutions
+        with tf.name_scope('convolutions'):
+            for i in xrange(len(self.conv_ws)):
+                # Convolve layer and activate with ReLU
+                preds = tf.nn.conv2d(
+                    last_input, self.conv_ws[i], [1, 1, 1, 1], padding=c.PADDING_D)
+                preds = tf.nn.relu(preds + self.conv_bs[i])
+
+                last_input = preds
+
+        # pooling layer
+        with tf.name_scope('pooling'):
+            preds = tf.nn.max_pool(preds, [1, 2, 2, 1], [1, 2, 2, 1], padding=c.PADDING_D)
+
+        # flatten preds for dense layers
+        shape = preds.get_shape().as_list()
+        # -1 can be used as one dimension to size dynamically
+        preds = tf.reshape(preds, [-1, shape[1] * shape[2] * shape[3]])
+
+        # fully-connected layers
+        with tf.name_scope('fully-connected'):
+            for i in xrange(len(self.fc_ws)):
+                preds = tf.matmul(preds, self.fc_ws[i]) + self.fc_bs[i]
+
+                # Activate with ReLU (or Sigmoid for last layer)
+                if i == len(self.fc_ws) - 1:
+                    preds = tf.sigmoid(preds)
+                else:
+                    preds = tf.nn.relu(preds)
+
+        # clip preds between [.1, 0.9] for stability
+        with tf.name_scope('clip'):
+            preds = tf.clip_by_value(preds, 0.1, 0.9)
+
+        return preds
