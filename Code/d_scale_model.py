@@ -48,6 +48,8 @@ class DScaleModel:
         Sets up the model graph in TensorFlow.
         """
 
+        self.train_vars = []  # the variables to train in the optimization step
+
         ##
         # Layer setup
         ##
@@ -84,6 +86,11 @@ class DScaleModel:
                         self.fc_ws.append(w([self.fc_layer_sizes[i],
                                              self.fc_layer_sizes[i + 1]]))
                         self.fc_bs.append(b([self.fc_layer_sizes[i + 1]]))
+
+                self.train_vars += self.conv_ws
+                self.train_vars += self.conv_bs
+                self.train_vars += self.fc_ws
+                self.train_vars += self.fc_bs
 
         ##
         # Training handled by DiscriminatorModel
