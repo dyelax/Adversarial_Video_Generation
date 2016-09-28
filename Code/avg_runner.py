@@ -27,7 +27,7 @@ class AVGRunner:
         self.sess = tf.Session()
         self.summary_writer = tf.train.SummaryWriter(c.SUMMARY_SAVE_DIR, graph=self.sess.graph)
 
-        print 'Init generator...'
+        print 'Init models...'
         self.g_model = GeneratorModel(self.sess,
                                       self.summary_writer,
                                       c.TRAIN_HEIGHT,
@@ -37,7 +37,6 @@ class AVGRunner:
                                       c.SCALE_FMS_G,
                                       c.SCALE_KERNEL_SIZES_G)
         if c.ADVERSARIAL:
-            print 'Init discriminator...'
             self.d_model = DiscriminatorModel(self.sess,
                                               self.summary_writer,
                                               c.TRAIN_HEIGHT,
@@ -45,8 +44,11 @@ class AVGRunner:
                                               c.SCALE_CONV_FMS_D,
                                               c.SCALE_KERNEL_SIZES_D,
                                               c.SCALE_FC_LAYER_SIZES_D)
-            self.d_model.define_graph(self.g_model)
+
+        print 'Define graphs...'
         self.g_model.define_graph(self.d_model)
+        if c.ADVERSARIAL:
+            self.d_model.define_graph(self.g_model)
 
         print 'Init variables...'
         self.saver = tf.train.Saver(keep_checkpoint_every_n_hours=2)
@@ -66,7 +68,7 @@ class AVGRunner:
                 # update discriminator
                 batch = get_train_batch()
                 print 'Training discriminator...'
-                self.d_model.train_step(batch, self.g_model)
+                self.d_model.train_step(batch)
 
             # update generator
             batch = get_train_batch()

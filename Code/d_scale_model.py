@@ -105,9 +105,6 @@ class DScaleModel:
         """
         input_shape = tf.shape(input_frames)
         batch_size = input_shape[0]
-        assert input_shape[1] == self.height and input_shape[2] == self.width, \
-            'Input_frames must have same dimensions as scale network. (%d, %d)' \
-            % (self.height, self.width)
 
         preds = tf.zeros([batch_size, 1])
         last_input = input_frames

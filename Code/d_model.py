@@ -39,6 +39,31 @@ class DiscriminatorModel:
         self.scale_fc_layer_sizes = scale_fc_layer_sizes
         self.num_scale_nets = len(scale_conv_layer_fms)
 
+        self.train_vars = []  # the variables to train in the optimization step
+        self.setup_scale_nets()
+
+    # noinspection PyAttributeOutsideInit
+    def setup_scale_nets(self):
+        """
+        Setup scale networks. Each will make the predictions for images at a given scale. Done
+        separately from define_graph() so that the generator can define its graph using the
+        discriminator scale nets before this defines its graph using the generator.
+        """
+
+        self.scale_nets = []
+        for scale_num in xrange(self.num_scale_nets):
+            with tf.name_scope('scale_' + str(scale_num)):
+                scale_factor = 1. / 2 ** ((self.num_scale_nets - 1) - scale_num)
+                scale_model = DScaleModel(scale_num,
+                                          int(self.height * scale_factor),
+                                          int(self.width * scale_factor),
+                                          self.scale_conv_layer_fms[scale_num],
+                                          self.scale_kernel_sizes[scale_num],
+                                          self.scale_fc_layer_sizes[scale_num])
+                self.scale_nets.append(scale_model)
+
+                self.train_vars += scale_model.train_vars
+
     # noinspection PyAttributeOutsideInit
     def define_graph(self, generator):
         """
@@ -47,27 +72,6 @@ class DiscriminatorModel:
         @param generator: The generator model that generates frames for this to discriminate.
         """
         with tf.name_scope('discriminator'):
-
-            self.train_vars = []  # the variables to train in the optimization step
-
-            ##
-            # Setup scale networks. Each will make the predictions for images at a given scale.
-            ##
-
-            self.scale_nets = []
-            for scale_num in xrange(self.num_scale_nets):
-                with tf.name_scope('scale_' + str(scale_num)):
-                    scale_factor = 1. / 2 ** ((self.num_scale_nets - 1) - scale_num)
-                    scale_model = DScaleModel(scale_num,
-                                              int(self.height * scale_factor),
-                                              int(self.width * scale_factor),
-                                              self.scale_conv_layer_fms[scale_num],
-                                              self.scale_kernel_sizes[scale_num],
-                                              self.scale_fc_layer_sizes[scale_num])
-                    self.scale_nets.append(scale_model)
-
-                    self.train_vars += scale_model.train_vars
-
             ##
             # Data
             ##
@@ -83,8 +87,6 @@ class DiscriminatorModel:
             self.gt_frames = self.input_clips[:, :, :, c.HIST_LEN * 3:]
             input_shape = tf.shape(self.g_input_frames)
             batch_size = input_shape[0]
-
-            # TODO: Generator side
 
             ##
             # Get Generator Frames
