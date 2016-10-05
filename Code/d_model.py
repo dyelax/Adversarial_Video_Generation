@@ -75,11 +75,6 @@ class DiscriminatorModel:
             ##
             # Data
             ##
-
-            # self.input_frames = tf.placeholder(
-            #    tf.float32, shape=[None, self.height, self.width, self.scale_conv_layer_fms[0, 0]])
-            # self.labels = tf.placeholder(tf.float32, shape=[None, 1], name='labels')
-
             self.input_clips = tf.placeholder(
                 tf.float32, shape=[None, self.height, self.width, (c.HIST_LEN + 1) * 3])
 
@@ -122,7 +117,7 @@ class DiscriminatorModel:
                     tf.concat(0, [self.g_scale_preds[scale_num], self.scale_gts[scale_num]]))
 
             # create the labels
-            self.labels = tf.concat(0, [tf.zeros([batch_size]), tf.ones([batch_size])])
+            self.labels = tf.concat(0, [tf.zeros([batch_size, 1]), tf.ones([batch_size, 1])])
 
             ##
             # Calculation

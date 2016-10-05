@@ -255,13 +255,10 @@ class GeneratorModel:
         # generated frame predictions
         preds = inputs
 
-        print preds
-
         # perform convolutions
         with tf.name_scope('convolutions'):
             for i in xrange(len(self.scale_kernel_sizes[scale_num])):
                 # Convolve layer
-                print i
                 preds = tf.nn.conv2d(
                     preds, self.ws[scale_num][i], [1, 1, 1, 1], padding=c.PADDING_G)
 
@@ -300,16 +297,6 @@ class GeneratorModel:
         if c.ADVERSARIAL:
             # Run the generator first to get generated frames
             scale_preds = self.sess.run(self.scale_preds_train, feed_dict=feed_dict)
-
-            # Run the discriminator nets on those frames to get predictions
-            d_feed_dict = {}
-            for scale_num, gen_frames in enumerate(scale_preds):
-                d_feed_dict[discriminator.scale_nets[scale_num].input_frames] = gen_frames
-            d_scale_preds = self.sess.run(discriminator.scale_preds, feed_dict=d_feed_dict)
-
-            # Add discriminator predictions to the
-            for i, preds in enumerate(d_scale_preds):
-                feed_dict[self.d_scale_preds[i]] = preds
 
         _, global_loss, global_psnr_error, global_sharpdiff_error, global_step, summaries = \
             self.sess.run([self.train_op,
