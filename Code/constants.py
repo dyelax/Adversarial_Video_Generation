@@ -185,7 +185,7 @@ SCALE_KERNEL_SIZES_G = [[3, 3, 3, 3],
 ##
 
 # learning rate for the discriminator model
-LRATE_D = 0.02
+LRATE_D = 0.0002
 # padding for convolutions in the discriminator model
 PADDING_D = 'VALID'
 # feature maps for each convolution of each scale network in the discriminator model
