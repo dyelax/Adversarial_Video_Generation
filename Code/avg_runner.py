@@ -36,7 +36,8 @@ class AVGRunner:
                                       c.FULL_WIDTH,
                                       c.SCALE_FMS_G,
                                       c.SCALE_KERNEL_SIZES_G)
-        if c.ADVERSARIAL:
+        self.d_model = None
+	if c.ADVERSARIAL:
             self.d_model = DiscriminatorModel(self.sess,
                                               self.summary_writer,
                                               c.TRAIN_HEIGHT,
