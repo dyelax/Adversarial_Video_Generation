@@ -153,7 +153,7 @@ L_NUM = 2
 # the power to which each gradient term is raised in GDL loss
 ALPHA_NUM = 1
 # the percentage of the adversarial loss to use in the combined loss
-LAM_ADV = 0.05
+LAM_ADV = 0.5
 # the percentage of the lp loss to use in the combined loss
 LAM_LP = 1
 # the percentage of the GDL loss to use in the combined loss
@@ -185,7 +185,7 @@ SCALE_KERNEL_SIZES_G = [[3, 3, 3, 3],
 ##
 
 # learning rate for the discriminator model
-LRATE_D = 0.00002
+LRATE_D = 0.002
 # padding for convolutions in the discriminator model
 PADDING_D = 'VALID'
 # feature maps for each convolution of each scale network in the discriminator model
