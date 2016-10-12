@@ -76,8 +76,7 @@ class AVGRunner:
             # update generator
             batch = get_train_batch()
             print 'Training generator...'
-            self.global_step = self.g_model.train_step(
-                batch, discriminator=(self.d_model if c.ADVERSARIAL else None))
+            self.global_step = self.g_model.train_step(batch)
 
             # save the models
             if self.global_step % c.MODEL_SAVE_FREQ == 0:
