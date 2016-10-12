@@ -270,14 +270,13 @@ class GeneratorModel:
 
         return preds, scale_gts
 
-    def train_step(self, batch, discriminator=None):
+    def train_step(self, batch):
         """
         Runs a training step using the global loss on each of the scale networks.
 
         @param batch: An array of shape
                       [c.BATCH_SIZE x self.height x self.width x (3 * (c.HIST_LEN + 1))].
                       The input and output frames, concatenated along the channel axis (index 3).
-        @param discriminator: The discriminator model. Default = None, if not adversarial.
 
         @return: The global step.
         """

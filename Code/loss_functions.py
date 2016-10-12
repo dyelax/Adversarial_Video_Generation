@@ -4,7 +4,8 @@ import numpy as np
 from tfutils import log10
 import constants as c
 
-def combined_loss(gen_frames, gt_frames, d_preds, lam_adv=1, lam_lp=1, lam_gdl=1, l_num=2, alpha=2):
+def combined_loss(gen_frames, gt_frames, d_preds, lam_adv=c.LAM_ADV, lam_lp=c.LAM_LP,
+                  lam_gdl=c.LAM_GDL, l_num=c.L_NUM, alpha=c.ALPHA_NUM):
     """
     Calculates the sum of the combined adversarial, lp and GDL losses in the given proportion. Used
     for training the generative model.
