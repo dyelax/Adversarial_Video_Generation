@@ -144,7 +144,6 @@ class DiscriminatorModel:
                 # global loss is the combined loss from every scale network
                 self.global_loss = adv_loss(self.scale_preds, self.labels)
                 self.global_step = tf.Variable(0, trainable=False, name='global_step')
-                # self.optimizer = tf.train.GradientDescentOptimizer(c.LRATE_D, name='optimizer')
                 self.optimizer = tf.train.AdamOptimizer(c.LRATE_D, name='optimizer')
                 self.train_op = self.optimizer.minimize(self.global_loss,
                                                         global_step=self.global_step,

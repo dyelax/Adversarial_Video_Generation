@@ -83,7 +83,7 @@ class AVGRunner:
                 print '-' * 30
                 print 'Saving models...'
                 self.saver.save(self.sess,
-                                c.MODEL_SAVE_DIR + 'model.ckpt',
+                                os.path.join(c.MODEL_SAVE_DIR, 'model.ckpt'),
                                 global_step=self.global_step)
                 print 'Saved models!'
                 print '-' * 30
