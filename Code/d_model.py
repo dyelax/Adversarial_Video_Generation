@@ -75,6 +75,7 @@ class DiscriminatorModel:
             ##
             # Data
             ##
+
             self.input_clips = tf.placeholder(
                 tf.float32, shape=[None, self.height, self.width, (c.HIST_LEN + 1) * 3])
 
@@ -86,6 +87,7 @@ class DiscriminatorModel:
             ##
             # Get Generator Frames
             ##
+
             with tf.name_scope('gen_frames'):
                 self.g_scale_preds = []  # the generated images at each scale
                 self.scale_gts = []  # the ground truth images at each scale
@@ -149,9 +151,14 @@ class DiscriminatorModel:
                                                         var_list=self.train_vars,
                                                         name='train_op')
 
+                # Accuracy test
+                all_preds = tf.pack(self.scale_preds)
+                self.accuracy = tf.reduce_mean(tf.equal(tf.round(all_preds), self.labels))
+
                 # add summaries to visualize in TensorBoard
                 loss_summary = tf.scalar_summary('loss_D', self.global_loss)
-                self.summaries = tf.merge_summary([loss_summary])
+                accuracy_summary = tf.scalar_summary('accuracy_D', self.accuracy)
+                self.summaries = tf.merge_summary([loss_summary, accuracy_summary])
 
     def train_step(self, batch):
         """

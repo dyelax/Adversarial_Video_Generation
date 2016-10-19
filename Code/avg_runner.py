@@ -39,14 +39,14 @@ class AVGRunner:
                                       c.SCALE_FMS_G,
                                       c.SCALE_KERNEL_SIZES_G)
         self.d_model = None
-	if c.ADVERSARIAL:
-            self.d_model = DiscriminatorModel(self.sess,
-                                              self.summary_writer,
-                                              c.TRAIN_HEIGHT,
-                                              c.TRAIN_WIDTH,
-                                              c.SCALE_CONV_FMS_D,
-                                              c.SCALE_KERNEL_SIZES_D,
-                                              c.SCALE_FC_LAYER_SIZES_D)
+        if c.ADVERSARIAL:
+                self.d_model = DiscriminatorModel(self.sess,
+                                                  self.summary_writer,
+                                                  c.TRAIN_HEIGHT,
+                                                  c.TRAIN_WIDTH,
+                                                  c.SCALE_CONV_FMS_D,
+                                                  c.SCALE_KERNEL_SIZES_D,
+                                                  c.SCALE_FC_LAYER_SIZES_D)
 
         print 'Define graphs...'
         self.g_model.define_graph(self.d_model)
