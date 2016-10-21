@@ -131,3 +131,13 @@ def batch_crop_to_bounding_box(images, offset_height, offset_width, target_heigh
     right = target_width + offset_width
 
     return images[:, top:bottom, left:right, :]
+
+def leaky_relu(tensor, leak=0.2):
+    """
+    Computes a leaky ReLU with the given alpha.
+
+    @param tensor: The input tensor.
+    @param leak: The slope of the relu on negative inputs.
+    @return: The tensor after applying the leaky ReLU.
+    """
+    return tf.maximum(leak * tensor, tensor)

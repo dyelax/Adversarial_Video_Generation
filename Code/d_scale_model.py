@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tfutils import w, b, conv_out_size
+from tfutils import w, b, conv_out_size, leaky_relu
 import constants as c
 
 
@@ -115,7 +115,8 @@ class DScaleModel:
                 # Convolve layer and activate with ReLU
                 preds = tf.nn.conv2d(
                     last_input, self.conv_ws[i], [1, 1, 1, 1], padding=c.PADDING_D)
-                preds = tf.nn.relu(preds + self.conv_bs[i])
+                # preds = tf.nn.relu(preds + self.conv_bs[i])
+                preds = leaky_relu(preds + self.conv_bs[i])
 
                 last_input = preds
 
@@ -137,7 +138,8 @@ class DScaleModel:
                 if i == len(self.fc_ws) - 1:
                     preds = tf.sigmoid(preds)
                 else:
-                    preds = tf.nn.relu(preds)
+                    # preds = tf.nn.relu(preds)
+                    preds = leaky_relu(preds)
 
         # clip preds between [.1, 0.9] for stability
         with tf.name_scope('clip'):

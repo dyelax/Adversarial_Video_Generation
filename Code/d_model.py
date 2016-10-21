@@ -152,7 +152,8 @@ class DiscriminatorModel:
 
                 # Accuracy test
                 all_preds = tf.pack(self.scale_preds)
-                self.accuracy = tf.reduce_mean(tf.equal(tf.round(all_preds), self.labels))
+                self.accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.round(all_preds), self.labels),
+                                                       tf.int8))
 
                 # add summaries to visualize in TensorBoard
                 loss_summary = tf.scalar_summary('loss_D', self.global_loss)
