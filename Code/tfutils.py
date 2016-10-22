@@ -132,7 +132,7 @@ def batch_crop_to_bounding_box(images, offset_height, offset_width, target_heigh
 
     return images[:, top:bottom, left:right, :]
 
-def leaky_relu(tensor, leak=0.2):
+def leaky_relu(tensor, leak=0.1):
     """
     Computes a leaky ReLU with the given alpha.
 
