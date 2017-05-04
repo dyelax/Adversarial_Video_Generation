@@ -87,6 +87,6 @@ Using the error measurements outlined in the paper (Peak Signal to Noise Ratio a
 
 > Why don't you train on patches larger then 32x32? Why not train on the whole image?
 
-Memory usage. Since the discriminator has fully-connected layers after the convolutions, the output of the last convolution must be flattened to connect to the first fully-connected layer. The size of this output is dependent on the input image size, and blows up really quickly (e.g. For an input size of 64x64, going from 128 feature maps to a fully connected layer with 512 nodes, you need a connection with 64*64*128*512 = 268,435,456 weights). Because of this, training on patches larger than 32x32 causes an out-of-memory error (at least on my machine).
+Memory usage. Since the discriminator has fully-connected layers after the convolutions, the output of the last convolution must be flattened to connect to the first fully-connected layer. The size of this output is dependent on the input image size, and blows up really quickly (e.g. For an input size of 64x64, going from 128 feature maps to a fully connected layer with 512 nodes, you need a connection with 64 * 64 * 128 * 512 = 268,435,456 weights). Because of this, training on patches larger than 32x32 causes an out-of-memory error (at least on my machine).
 
 Luckily, you only need the discriminator for training, and the generator network is fully convolutional, so you can test the weights you trained on 32x32 images over images of any size (which is why I'm able to do generations for the entire Ms. Pac-Man board).
