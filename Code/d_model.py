@@ -89,8 +89,8 @@ class DiscriminatorModel:
                                                         name='train_op')
 
                 # add summaries to visualize in TensorBoard
-                loss_summary = tf.scalar_summary('loss_D', self.global_loss)
-                self.summaries = tf.merge_summary([loss_summary])
+                loss_summary = tf.summary.scalar('loss_D', self.global_loss)
+                self.summaries = tf.summary.merge([loss_summary])
 
     def build_feed_dict(self, input_frames, gt_output_frames, generator):
         """
