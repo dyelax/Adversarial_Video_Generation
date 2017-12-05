@@ -1,4 +1,6 @@
 # Adversarial Video Generation
+This project is forked from dyelax/Adversarial_Video_Generation. I'm making some changes to make it usable on Python 3 and TensorFlow 1.x. I'm also trying to make the data generation more common (e.g. takes data from other programs) and use less hard disk (the original version generates 5000000 patches of image, taking a long time and seeming not nessesary).
+
 This project implements a generative adversarial network to predict future frames of video, as detailed in 
 ["Deep Multi-Scale Video Prediction Beyond Mean Square Error"](https://arxiv.org/abs/1511.05440) by Mathieu, 
 Couprie & LeCun. Their official code (using Torch) can be found 
