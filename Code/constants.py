@@ -87,7 +87,7 @@ FULL_HEIGHT = 210
 FULL_WIDTH = 160
 # the height and width of the patches to train on
 TRAIN_HEIGHT = TRAIN_WIDTH = 32
-
+NUM_WORKERS = 8
 ##
 # Output
 ##
