@@ -3,6 +3,7 @@ import numpy as np
 from scipy.ndimage import imread
 from glob import glob
 import os
+from six.moves import xrange
 
 import constants as c
 from tfutils import log10
@@ -193,8 +194,8 @@ def sharp_diff_error(gen_frames, gt_frames):
     # TODO: Could this be simplified with one filter [[-1, 2], [0, -1]]?
     pos = tf.constant(np.identity(3), dtype=tf.float32)
     neg = -1 * pos
-    filter_x = tf.expand_dims(tf.pack([neg, pos]), 0)  # [-1, 1]
-    filter_y = tf.pack([tf.expand_dims(pos, 0), tf.expand_dims(neg, 0)])  # [[1],[-1]]
+    filter_x = tf.expand_dims(tf.stack([neg, pos]), 0)  # [-1, 1]
+    filter_y = tf.stack([tf.expand_dims(pos, 0), tf.expand_dims(neg, 0)])  # [[1],[-1]]
     strides = [1, 1, 1, 1]  # stride of (1, 1)
     padding = 'SAME'
 

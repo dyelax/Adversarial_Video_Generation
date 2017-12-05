@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tfutils import w, b, conv_out_size
 import constants as c
+from six.moves import xrange
 
 
 # noinspection PyShadowingNames
@@ -86,7 +87,7 @@ class DScaleModel:
                 # Add in an initial layer to go from the last conv to the first fully-connected.
                 # Use /2 for the height and width because there is a 2x2 pooling layer
                 self.fc_layer_sizes.insert(
-                    0, (last_out_height / 2) * (last_out_width / 2) * self.conv_layer_fms[-1])
+                    0, (last_out_height // 2) * (last_out_width // 2) * self.conv_layer_fms[-1])
 
                 fc_ws = []
                 fc_bs = []

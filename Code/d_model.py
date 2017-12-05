@@ -1,6 +1,7 @@
 import tensorflow as tf
 import numpy as np
 from skimage.transform import resize
+from six.moves import xrange
 
 from d_scale_model import DScaleModel
 from loss_functions import adv_loss
@@ -89,8 +90,8 @@ class DiscriminatorModel:
                                                         name='train_op')
 
                 # add summaries to visualize in TensorBoard
-                loss_summary = tf.scalar_summary('loss_D', self.global_loss)
-                self.summaries = tf.merge_summary([loss_summary])
+                loss_summary = tf.summary.scalar('loss_D', self.global_loss)
+                self.summaries = tf.summary.merge([loss_summary])
 
     def build_feed_dict(self, input_frames, gt_output_frames, generator):
         """
@@ -129,7 +130,7 @@ class DiscriminatorModel:
                 # for skimage.transform.resize, images need to be in range [0, 1], so normalize to
                 # [0, 1] before resize and back to [-1, 1] after
                 sknorm_img = (img / 2) + 0.5
-                resized_frame = resize(sknorm_img, [scale_net.height, scale_net.width, 3])
+                resized_frame = resize(sknorm_img, [scale_net.height, scale_net.width, 3], mode='constant')
                 scaled_gt_output_frames[i] = (resized_frame - 0.5) * 2
 
             # combine with resized gt_output_frames to get inputs for prediction
@@ -179,9 +180,9 @@ class DiscriminatorModel:
         ##
 
         if global_step % c.STATS_FREQ == 0:
-            print 'DiscriminatorModel: step %d | global loss: %f' % (global_step, global_loss)
+            print('DiscriminatorModel: step %d | global loss: %f' % (global_step, global_loss))
         if global_step % c.SUMMARY_FREQ == 0:
-            print 'DiscriminatorModel: saved summaries'
+            print('DiscriminatorModel: saved summaries')
             self.summary_writer.add_summary(summaries, global_step)
 
         return global_step

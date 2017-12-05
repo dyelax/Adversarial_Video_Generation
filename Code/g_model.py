@@ -4,6 +4,7 @@ from scipy.misc import imsave
 from skimage.transform import resize
 from copy import deepcopy
 import os
+from six.moves import xrange
 
 import constants as c
 from loss_functions import combined_loss
@@ -114,7 +115,7 @@ class GeneratorModel:
                             if scale_num > 0:
                                 last_gen_frames = tf.image.resize_images(
                                     last_gen_frames,[scale_height, scale_width])
-                                inputs = tf.concat(3, [inputs, last_gen_frames])
+                                inputs = tf.concat([inputs, last_gen_frames], 3)
 
                             # generated frame predictions
                             preds = inputs
@@ -196,7 +197,7 @@ class GeneratorModel:
                                                         name='train_op')
 
                 # train loss summary
-                loss_summary = tf.scalar_summary('train_loss_G', self.global_loss)
+                loss_summary = tf.summary.scalar('train_loss_G', self.global_loss)
                 self.summaries_train.append(loss_summary)
 
             ##
@@ -215,22 +216,22 @@ class GeneratorModel:
                 self.sharpdiff_error_test = sharp_diff_error(self.scale_preds_test[-1],
                                                              self.gt_frames_test)
                 # train error summaries
-                summary_psnr_train = tf.scalar_summary('train_PSNR',
+                summary_psnr_train = tf.summary.scalar('train_PSNR',
                                                        self.psnr_error_train)
-                summary_sharpdiff_train = tf.scalar_summary('train_SharpDiff',
+                summary_sharpdiff_train = tf.summary.scalar('train_SharpDiff',
                                                             self.sharpdiff_error_train)
                 self.summaries_train += [summary_psnr_train, summary_sharpdiff_train]
 
                 # test error
-                summary_psnr_test = tf.scalar_summary('test_PSNR',
+                summary_psnr_test = tf.summary.scalar('test_PSNR',
                                                       self.psnr_error_test)
-                summary_sharpdiff_test = tf.scalar_summary('test_SharpDiff',
+                summary_sharpdiff_test = tf.summary.scalar('test_SharpDiff',
                                                            self.sharpdiff_error_test)
                 self.summaries_test += [summary_psnr_test, summary_sharpdiff_test]
 
             # add summaries to visualize in TensorBoard
-            self.summaries_train = tf.merge_summary(self.summaries_train)
-            self.summaries_test = tf.merge_summary(self.summaries_test)
+            self.summaries_train = tf.summary.merge(self.summaries_train)
+            self.summaries_test = tf.summary.merge(self.summaries_test)
 
     def train_step(self, batch, discriminator=None):
         """
@@ -283,16 +284,16 @@ class GeneratorModel:
         # User output
         ##
         if global_step % c.STATS_FREQ == 0:
-            print 'GeneratorModel : Step ', global_step
-            print '                 Global Loss    : ', global_loss
-            print '                 PSNR Error     : ', global_psnr_error
-            print '                 Sharpdiff Error: ', global_sharpdiff_error
+            print('GeneratorModel : Step ', global_step)
+            print('                 Global Loss    : ', global_loss)
+            print('                 PSNR Error     : ', global_psnr_error)
+            print('                 Sharpdiff Error: ', global_sharpdiff_error)
         if global_step % c.SUMMARY_FREQ == 0:
             self.summary_writer.add_summary(summaries, global_step)
-            print 'GeneratorModel: saved summaries'
+            print('GeneratorModel: saved summaries')
         if global_step % c.IMG_SAVE_FREQ == 0:
-            print '-' * 30
-            print 'Saving images...'
+            print('-' * 30)
+            print('Saving images...')
 
             # if not adversarial, we didn't get the preds for each scale net before for the
             # discriminator prediction, so do it now
@@ -337,8 +338,8 @@ class GeneratorModel:
                     imsave(path + '_gen.png', gen_img)
                     imsave(path + '_gt.png', gt_img)
 
-            print 'Saved images!'
-            print '-' * 30
+            print('Saved images!')
+            print('-' * 30)
 
         return global_step
 
@@ -360,8 +361,8 @@ class GeneratorModel:
         if num_rec_out < 1:
             raise ValueError('num_rec_out must be >= 1')
 
-        print '-' * 30
-        print 'Testing:'
+        print('-' * 30)
+        print('Testing:')
 
         ##
         # Split into inputs and outputs
@@ -396,9 +397,9 @@ class GeneratorModel:
             rec_preds.append(preds)
             rec_summaries.append(summaries)
 
-            print 'Recursion ', rec_num
-            print 'PSNR Error     : ', psnr
-            print 'Sharpdiff Error: ', sharpdiff
+            print('Recursion ', rec_num)
+            print('PSNR Error     : ', psnr)
+            print('Sharpdiff Error: ', sharpdiff)
 
         # write summaries
         # TODO: Think of a good way to write rec output summaries - rn, just using first output.
@@ -425,4 +426,4 @@ class GeneratorModel:
                     imsave(os.path.join(pred_dir, 'gen_' + str(rec_num) + '.png'), gen_img)
                     imsave(os.path.join(pred_dir, 'gt_' + str(rec_num) + '.png'), gt_img)
 
-        print '-' * 30
+        print('-' * 30)
