@@ -51,11 +51,18 @@ class AVGRunner:
                                       c.SCALE_KERNEL_SIZES_G)
 
         print('Init variables...')
-        self.saver = tf.train.Saver(keep_checkpoint_every_n_hours=2)
+        if model_load_path is not None:
+            self.saver = tf.train.Saver(var_list=tf.trainable_variables())
+        else:
+            self.saver = tf.train.Saver(keep_checkpoint_every_n_hours=2)
         self.sess.run(tf.global_variables_initializer())
+        print('Variables:', [x.name for x in tf.global_variables()])
+        print('Trainables:', [x.name for x in tf.trainable_variables()])
 
         # if load path specified, load a saved model
         if model_load_path is not None:
+            v = tf.contrib.framework.list_variables(model_load_path)
+            print('Variables in', model_load_path, ':', [x[0] for x in v])
             self.saver.restore(self.sess, model_load_path)
             print('Model restored from ' + model_load_path)
 
