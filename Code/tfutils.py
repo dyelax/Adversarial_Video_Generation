@@ -92,12 +92,12 @@ def batch_pad_to_bounding_box(images, offset_height, offset_width, target_height
     rpad = np.zeros([batch_size, target_height, num_rpad, channels])
 
     padded = images
-    if num_tpad > 0 and num_bpad > 0: padded = tf.concat(1, [tpad, padded, bpad])
-    elif num_tpad > 0: padded = tf.concat(1, [tpad, padded])
-    elif num_bpad > 0: padded = tf.concat(1, [padded, bpad])
-    if num_lpad > 0 and num_rpad > 0: padded = tf.concat(2, [lpad, padded, rpad])
-    elif num_lpad > 0: padded = tf.concat(2, [lpad, padded])
-    elif num_rpad > 0: padded = tf.concat(2, [padded, rpad])
+    if num_tpad > 0 and num_bpad > 0: padded = tf.concat(axis=1, values=[tpad, padded, bpad])
+    elif num_tpad > 0: padded = tf.concat(axis=1, values=[tpad, padded])
+    elif num_bpad > 0: padded = tf.concat(axis=1, values=[padded, bpad])
+    if num_lpad > 0 and num_rpad > 0: padded = tf.concat(axis=2, values=[lpad, padded, rpad])
+    elif num_lpad > 0: padded = tf.concat(axis=2, values=[lpad, padded])
+    elif num_rpad > 0: padded = tf.concat(axis=2, values=[padded, rpad])
 
     return padded
 

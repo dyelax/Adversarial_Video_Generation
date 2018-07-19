@@ -27,7 +27,7 @@ class AVGRunner:
         self.num_test_rec = num_test_rec
 
         self.sess = tf.Session()
-        self.summary_writer = tf.train.SummaryWriter(c.SUMMARY_SAVE_DIR, graph=self.sess.graph)
+        self.summary_writer = tf.summary.FileWriter(c.SUMMARY_SAVE_DIR, graph=self.sess.graph)
 
         if c.ADVERSARIAL:
             print 'Init discriminator...'
