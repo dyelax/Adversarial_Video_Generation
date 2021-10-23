@@ -32,7 +32,7 @@ Using the error measurements outlined in the paper (Peak Signal to Noise Ratio a
 
 1. Clone or download this repository.
 2. Prepare your data:
-  - If you want to replicate my results, you can [download the Ms. Pac-Man dataset here](https://drive.google.com/open?id=0Byf787GZQ7KvV25xMWpWbV9LdUU). Put this in a directory named `Data/` in the root of this project for default behavior. Otherwise, you will need to specify your data location using the options outlined in parts 3 and 4.
+  - If you want to replicate my results, you can [download the Ms. Pac-Man dataset here](https://drive.google.com/file/d/0Byf787GZQ7KvV25xMWpWbV9LdUU/view?usp=sharing&resourcekey=0-Vequaxb8kl0m_NIzJJt52g). Put this in a directory named `Data/` in the root of this project for default behavior. Otherwise, you will need to specify your data location using the options outlined in parts 3 and 4.
   - If you would like to train on your own videos, preprocess them so that they are directories of frame sequences as structured below. (Neither the names nor the image extensions matter, only the structure):
   ```
     - Test
@@ -65,7 +65,7 @@ Using the error measurements outlined in the paper (Peak Signal to Noise Ratio a
   - This can take a few hours to complete, depending on the number of clips you want.
   
 4. Train/Test:
-  - If you want to plug-and-play with the Ms. Pac-Man dataset, you can [download my trained models here](https://drive.google.com/open?id=0Byf787GZQ7KvR2JvMUNIZnFlbm8). Load them using the `-l` option. (e.g. `python avg_runner.py -l ./Models/Adversarial/model.ckpt-500000`).
+  - If you want to plug-and-play with the Ms. Pac-Man dataset, you can [download my trained models here](https://drive.google.com/file/d/0Byf787GZQ7KvR2JvMUNIZnFlbm8/view?usp=sharing&resourcekey=0-nKmDhxA54ZXtQKql_45DdA). Load them using the `-l` option. (e.g. `python avg_runner.py -l ./Models/Adversarial/model.ckpt-500000`).
   - Train and test your network by running `python avg_runner.py` from the `Code/` directory with the following options:
   ```
   -l/--load_path=    <Relative/path/to/saved/model>
