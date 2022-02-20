@@ -61,7 +61,7 @@ def lp_loss(gen_frames, gt_frames, l_num):
         scale_losses.append(tf.reduce_sum(tf.abs(gen_frames[i] - gt_frames[i])**l_num))
 
     # condense into one tensor and avg
-    return tf.reduce_mean(tf.pack(scale_losses))
+    return tf.reduce_mean(tf.stack(scale_losses))
 
 
 def gdl_loss(gen_frames, gt_frames, alpha):
@@ -80,8 +80,8 @@ def gdl_loss(gen_frames, gt_frames, alpha):
         # create filters [-1, 1] and [[1],[-1]] for diffing to the left and down respectively.
         pos = tf.constant(np.identity(3), dtype=tf.float32)
         neg = -1 * pos
-        filter_x = tf.expand_dims(tf.pack([neg, pos]), 0)  # [-1, 1]
-        filter_y = tf.pack([tf.expand_dims(pos, 0), tf.expand_dims(neg, 0)])  # [[1],[-1]]
+        filter_x = tf.expand_dims(tf.stack([neg, pos]), 0)  # [-1, 1]
+        filter_y = tf.stack([tf.expand_dims(pos, 0), tf.expand_dims(neg, 0)])  # [[1],[-1]]
         strides = [1, 1, 1, 1]  # stride of (1, 1)
         padding = 'SAME'
 
@@ -96,7 +96,7 @@ def gdl_loss(gen_frames, gt_frames, alpha):
         scale_losses.append(tf.reduce_sum((grad_diff_x ** alpha + grad_diff_y ** alpha)))
 
     # condense into one tensor and avg
-    return tf.reduce_mean(tf.pack(scale_losses))
+    return tf.reduce_mean(tf.stack(scale_losses))
 
 
 def adv_loss(preds, labels):
@@ -115,4 +115,4 @@ def adv_loss(preds, labels):
         scale_losses.append(loss)
 
     # condense into one tensor and avg
-    return tf.reduce_mean(tf.pack(scale_losses))
+    return tf.reduce_mean(tf.stack(scale_losses))
